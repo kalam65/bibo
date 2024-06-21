@@ -1,10 +1,11 @@
+import os
+import uvicorn
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List
 
 app = FastAPI()
 
-# Define the data model
 class Job(BaseModel):
     company_name: str
     job_title: str
@@ -17,7 +18,6 @@ class Job(BaseModel):
     job_type: str
     email: str
 
-# In-memory storage for jobs
 jobs = []
 
 @app.post("/jobs/")
@@ -50,5 +50,5 @@ def delete_job(job_id: int):
     return deleted_job
 
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    port = int(os.getenv("PORT", 8000))
+    uvicorn.run(app, host="0.0.0.0", port=port)
